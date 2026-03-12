@@ -1,4 +1,3 @@
-import pytest
 from aes_utils import encriptar
 
 
@@ -9,7 +8,7 @@ def test_encriptar_retorna_hex():
 
 
 def test_encriptar_longitud_minima():
-    # IV (16 bytes) + al menos un bloque (16 bytes) → 64 chars hex mínimo
+    # IV (16 bytes) + al menos un bloque (16 bytes) -> 64 chars hex mínimo
     resultado = encriptar("a", "llave")
     assert len(resultado) >= 64
 

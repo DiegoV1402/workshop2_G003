@@ -17,13 +17,6 @@ def main(
 
     Deriva la llave mediante SHA-256, genera un IV aleatorio y produce una
     cadena hexadecimal con formato ``<iv><ciphertext>``.
-
-    Parameters
-    ----------
-    texto : str
-        Texto plano que se desea proteger.
-    llave : str
-        Contraseña secreta; se deriva internamente a 32 bytes con SHA-256.
     """
     resultado = encriptar(texto, llave)
     console.print(Panel(f"[bold green]{resultado}[/]", title="Texto Encriptado", expand=False))

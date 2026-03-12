@@ -16,12 +16,12 @@ def test_roundtrip_caracteres_especiales():
 
 def test_llave_incorrecta_falla():
     encriptado = encriptar("secreto", "llave_correcta")
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         desencriptar(encriptado, "llave_incorrecta")
 
 
 def test_hex_invalido_falla():
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         desencriptar("no_es_hex_valido", "llave")
 
 

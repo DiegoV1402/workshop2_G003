@@ -30,8 +30,7 @@ def encriptar(texto: str, llave: str) -> str:
 
     Genera un IV aleatorio de 16 bytes por cada llamada, lo antepone al
     ciphertext y devuelve la concatenación IV+ciphertext codificada en
-    hexadecimal. El padding PKCS#7 se aplica automáticamente para alinear
-    el texto al tamaño de bloque de AES.
+    hexadecimal. El padding PKCS#7 se aplica automáticamente.
 
     Parameters
     ----------
@@ -44,16 +43,7 @@ def encriptar(texto: str, llave: str) -> str:
     Returns
     -------
     str
-        Cadena hexadecimal con formato ``<iv_hex><ciphertext_hex>``,
-        donde los primeros 32 caracteres (16 bytes) corresponden al IV.
-
-    Examples
-    --------
-    >>> resultado = encriptar("hola mundo", "mi_llave")
-    >>> isinstance(resultado, str)
-    True
-    >>> len(resultado) >= 64  # IV (32 hex) + al menos un bloque (32 hex)
-    True
+        Cadena hexadecimal con formato ``<iv_hex><ciphertext_hex>``.
     """
     key = _derive_key(llave)
     iv = get_random_bytes(16)
@@ -66,38 +56,20 @@ def desencriptar(texto_encriptado: str, llave: str) -> str:
     """
     Desencripta un hex string producido por :func:`encriptar`.
 
-    Extrae el IV de los primeros 16 bytes del hex decodificado, reconstruye
-    el cifrador AES-CBC y remueve el padding PKCS#7 para recuperar el texto
-    original.
+    Extrae el IV de los primeros 16 bytes, reconstruye el cifrador AES-CBC
+    y remueve el padding PKCS#7 para recuperar el texto original.
 
     Parameters
     ----------
     texto_encriptado : str
-        Cadena hexadecimal generada por :func:`encriptar`, con formato
-        ``<iv_hex><ciphertext_hex>``.
+        Cadena hexadecimal generada por :func:`encriptar`.
     llave : str
-        Llave secreta en texto plano; debe ser idéntica a la usada durante
-        la encriptación.
+        Llave secreta en texto plano idéntica a la usada al encriptar.
 
     Returns
     -------
     str
         Texto plano original decodificado en UTF-8.
-
-    Raises
-    ------
-    ValueError
-        Si ``texto_encriptado`` no es un hex string válido o el padding
-        resultante es incorrecto (llave equivocada).
-    UnicodeDecodeError
-        Si los bytes desencriptados no pueden interpretarse como UTF-8.
-
-    Examples
-    --------
-    >>> from aes_utils import encriptar, desencriptar
-    >>> texto = "mensaje secreto"
-    >>> desencriptar(encriptar(texto, "llave"), "llave") == texto
-    True
     """
     key = _derive_key(llave)
     data = bytes.fromhex(texto_encriptado)
